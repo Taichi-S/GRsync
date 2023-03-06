@@ -30,12 +30,12 @@ def getDeviceModel():
         data = resp.read()
         props = json.loads(data)
         if props['errCode'] != 200:
-            print "Error code: %d, Error message: %s" % (photoDict['errCode'], photoDict['errMsg'])
+            print("Error code: %d, Error message: %s" % (photoDict['errCode'], photoDict['errMsg']))
             sys.exit(1)
         else:
             return props['model']
     except urllib2.URLError, e:
-        print "Unable to fetch device props from device"
+        print("Unable to fetch device props from device")
         sys.exit(1)
 
 def getBatteryLevel():
@@ -45,12 +45,12 @@ def getBatteryLevel():
         data = resp.read()
         props = json.loads(data)
         if props['errCode'] != 200:
-            print "Error code: %d, Error message: %s" % (photoDict['errCode'], photoDict['errMsg'])
+            print("Error code: %d, Error message: %s" % (photoDict['errCode'], photoDict['errMsg']))
             sys.exit(1)
         else:
             return props['battery']
     except urllib2.URLError, e:
-        print "Unable to fetch device props from %s" % DEVICE
+        print("Unable to fetch device props from %s" % DEVICE)
         sys.exit(1)
 
 def getPhotoList():
@@ -60,7 +60,7 @@ def getPhotoList():
         data = resp.read()
         photoDict = json.loads(data)
         if photoDict['errCode'] != 200:
-            print "Error code: %d, Error message: %s" % (photoDict['errCode'], photoDict['errMsg'])
+            print("Error code: %d, Error message: %s" % (photoDict['errCode'], photoDict['errMsg']))
             sys.exit(1)
         else:
             photoList = []
@@ -75,7 +75,7 @@ def getPhotoList():
                     photoList.append("%s/%s" % (dic['name'], file ))
             return photoList
     except urllib2.URLError, e:
-        print "Unable to fetch photo list from %s" % DEVICE
+        print("Unable to fetch photo list from %s" % DEVICE)
         sys.exit(1)
     
 def getLocalFiles():
@@ -104,7 +104,7 @@ def shutdownGR():
     response = urllib2.urlopen(req, "{}")
 
 def downloadPhotos(isAll):
-    print "Fetching photo list from %s ..." % DEVICE
+    print("Fetching photo list from %s ..." % DEVICE)
     photoLists = getPhotoList()
     localFiles = getLocalFiles()
     count = 0
@@ -113,7 +113,7 @@ def downloadPhotos(isAll):
     else:
         starturi = "%s/%s" % (STARTDIR, STARTFILE)
         if starturi not in photoLists:
-            print "Unable to find %s in Ricoh %s" % (starturi, DEVICE)
+            print("Unable to find %s in Ricoh %s" % (starturi, DEVICE))
             sys.exit(1)
         else:
             while True:
@@ -123,23 +123,23 @@ def downloadPhotos(isAll):
                     totalPhoto = len(photoLists)
                     break
                     
-    print "Start to download photos ..."    
+    print("Start to download photos ..."    )
     while True:
         if not photoLists:
-            print "\nAll photos are downloaded."
+            print("\nAll photos are downloaded.")
             shutdownGR()
             break
         else:
             photouri = photoLists.pop(0)
             count += 1
             if photouri in localFiles:
-                print "(%d/%d) Skip %s, already have it on local drive!!" % (count, totalPhoto, photouri)
+                print("(%d/%d) Skip %s, already have it on local drive!!" % (count, totalPhoto, photouri))
             else:
-                print "(%d/%d) Downloading %s now ... " % (count, totalPhoto, photouri),
+                print("(%d/%d) Downloading %s now ... " % (count, totalPhoto, photouri),)
                 if fetchPhoto(photouri) == True:
-                    print "done!!"
+                    print("done!!")
                 else:
-                    print "*** FAILED ***"
+                    print("*** FAILED ***")
     
 if __name__ == "__main__":
     # set connection timeout to 2 seconds
@@ -172,13 +172,13 @@ Advanced usage - Download photos after specific directory and file:
 
     model = getDeviceModel()
     if model not in SUPPORT_DEVICE:
-        print "Your source device '%s' is unknown or not supported!" % model
+        print("Your source device '%s' is unknown or not supported!" % model)
         sys.exit(1)
     else:
         DEVICE = model
 
     if getBatteryLevel() < 15:
-        print "Your battery level is less than 15%, please charge it before sync operation!"
+        print("Your battery level is less than 15%, please charge it before sync operation!")
         sys.exit(1)
 
     if parser.parse_args().all == True and parser.parse_args().dir is None and parser.parse_args().file is None:
@@ -188,13 +188,13 @@ Advanced usage - Download photos after specific directory and file:
         if match:
             STARTDIR = parser.parse_args().dir
         else:
-            print "Incorrect directory name. It should be something like 100RICOH"
+            print("Incorrect directory name. It should be something like 100RICOH")
             sys.exit(1)
         match = re.match(r"^R0\d{6}\.JPG$", parser.parse_args().file)
         if match:
             STARTFILE = parser.parse_args().file
         else:
-            print "Incorrect file name. It should be something like R0999999.JPG. (all in CAPITAL)"
+            print("Incorrect file name. It should be something like R0999999.JPG. (all in CAPITAL)")
             sys.exit(1)
         downloadPhotos(isAll=False)
     else:
