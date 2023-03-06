@@ -34,7 +34,7 @@ def getDeviceModel():
             sys.exit(1)
         else:
             return props['model']
-    except urllib2.URLError, e:
+    except urllib2.URLError:
         print("Unable to fetch device props from device")
         sys.exit(1)
 
@@ -49,7 +49,7 @@ def getBatteryLevel():
             sys.exit(1)
         else:
             return props['battery']
-    except urllib2.URLError, e:
+    except urllib2.URLError:
         print("Unable to fetch device props from %s" % DEVICE)
         sys.exit(1)
 
@@ -74,7 +74,7 @@ def getPhotoList():
                 for file in dic['files']:
                     photoList.append("%s/%s" % (dic['name'], file ))
             return photoList
-    except urllib2.URLError, e:
+    except urllib2.URLError:
         print("Unable to fetch photo list from %s" % DEVICE)
         sys.exit(1)
     
@@ -95,7 +95,7 @@ def fetchPhoto(photouri):
         with open(PHOTO_DEST_DIR+photouri, "wb") as localfile:
             localfile.write(f.read())
         return True
-    except urllib2.URLError, e:
+    except urllib2.URLError:
         return False
 
 def shutdownGR():
