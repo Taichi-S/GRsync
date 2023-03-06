@@ -26,7 +26,7 @@ PHOTO_DEST_DIR = "/path/to/downloaded/photos/"
 2. Simple usage - Download ALL photos from Ricoh GR II or III via Wifi
 
 ```bash
-./GRsync -a
+python3 GRsync.py -a
 ```
 
 3. Advanced usage - Download photos after specific directory and file
