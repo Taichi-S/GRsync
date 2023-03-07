@@ -1,7 +1,7 @@
 #!/usr/bin/python -u
 # -*- coding: utf-8 -*-
 
-import urllib.request as urllib2
+import urllib.request, urllib.error
 import sys
 import json
 import argparse
@@ -24,9 +24,9 @@ SUPPORT_DEVICE = ['RICOH GR II', 'RICOH GR III']
 DEVICE = "RICOH GR III"
 
 def getDeviceModel():
-    req = urllib2.Request(GR_HOST + GR_PROPS)
+    req = urllib.request.Request(GR_HOST + GR_PROPS)
     try:
-        resp = urllib2.urlopen(req)
+        resp = urllib.request.urlopen(req)
         data = resp.read()
         props = json.loads(data)
         if props['errCode'] != 200:
@@ -34,14 +34,14 @@ def getDeviceModel():
             sys.exit(1)
         else:
             return props['model']
-    except urllib2.URLError:
+    except urllib.error.URLError as e:
         print("Unable to fetch device props from device. Please connect to GR cam's wifi.")
         sys.exit(1)
 
 def getBatteryLevel():
-    req = urllib2.Request(GR_HOST + GR_PROPS)
+    req = urllib.request.Request(GR_HOST + GR_PROPS)
     try:
-        resp = urllib2.urlopen(req)
+        resp = urllib.request.urlopen(req)
         data = resp.read()
         props = json.loads(data)
         if props['errCode'] != 200:
@@ -49,14 +49,14 @@ def getBatteryLevel():
             sys.exit(1)
         else:
             return props['battery']
-    except urllib2.URLError:
+    except urllib.error.URLError as e:
         print("Unable to fetch device props from %s" % DEVICE)
         sys.exit(1)
 
 def getPhotoList():
-    req = urllib2.Request(GR_HOST + PHOTO_LIST_URI)
+    req = urllib.request.Request(GR_HOST + PHOTO_LIST_URI)
     try:
-        resp = urllib2.urlopen(req)
+        resp = urllib.request.urlopen(req)
         data = resp.read()
         photoDict = json.loads(data)
         if photoDict['errCode'] != 200:
@@ -74,7 +74,7 @@ def getPhotoList():
                 for file in dic['files']:
                     photoList.append("%s/%s" % (dic['name'], file ))
             return photoList
-    except urllib2.URLError:
+    except urllib.error.URLError as e:
         print("Unable to fetch photo list from %s" % DEVICE)
         sys.exit(1)
     
@@ -89,19 +89,19 @@ def getLocalFiles():
 def fetchPhoto(photouri):
     try:
         if DEVICE == 'GR2':
-            f = urllib2.urlopen(GR_HOST+photouri)
+            f = urllib.request.urlopen(GR_HOST+photouri)
         else: 
-            f = urllib2.urlopen(GR_HOST+PHOTO_LIST_URI+'/'+photouri)
+            f = urllib.request.urlopen(GR_HOST+PHOTO_LIST_URI+'/'+photouri)
         with open(PHOTO_DEST_DIR+photouri, "wb") as localfile:
             localfile.write(f.read())
         return True
-    except urllib2.URLError:
+    except urllib.error.URLError as e:
         return False
 
 def shutdownGR():
-    req = urllib2.Request("http://192.168.0.1/v1/device/finish")
+    req = urllib.request.Request("http://192.168.0.1/v1/device/finish")
     req.add_header('Content-Type', 'application/json')
-    response = urllib2.urlopen(req, "{}")
+    response = urllib.request.urlopen(req, "{}")
 
 def downloadPhotos(isAll):
     print("Fetching photo list from %s ..." % DEVICE)
