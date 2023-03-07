@@ -21,7 +21,7 @@ GR_PROPS = "v1/props"
 STARTDIR = ""
 STARTFILE = ""
 SUPPORT_DEVICE = ['RICOH GR II', 'RICOH GR III']
-DEVICE = "RICOH GR II"
+DEVICE = "RICOH GR III"
 
 def getDeviceModel():
     req = urllib2.Request(GR_HOST + GR_PROPS)
