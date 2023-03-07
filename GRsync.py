@@ -35,7 +35,7 @@ def getDeviceModel():
         else:
             return props['model']
     except urllib2.URLError:
-        print("Unable to fetch device props from device")
+        print("Unable to fetch device props from device. Please connect to GR cam's wifi.")
         sys.exit(1)
 
 def getBatteryLevel():
