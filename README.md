@@ -32,7 +32,7 @@ python3 GRsync.py -a
 3. Advanced usage - Download photos after specific directory and file
 
 ```bash
-./GRsync -d 100RICOH -f R0000005.JPG
+python3 GRsync.py -d 100RICOH -f R0000005.JPG
 ```
 
 ## Contribution
