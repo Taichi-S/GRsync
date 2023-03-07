@@ -88,7 +88,7 @@ def getLocalFiles():
 
 def fetchPhoto(photouri):
     try:
-        if DEVICE is 'GR2':
+        if DEVICE == 'GR2':
             f = urllib2.urlopen(GR_HOST+photouri)
         else: 
             f = urllib2.urlopen(GR_HOST+PHOTO_LIST_URI+'/'+photouri)
